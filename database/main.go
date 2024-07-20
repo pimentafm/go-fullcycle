@@ -48,6 +48,11 @@ func main() {
 
 	// fmt.Printf("Product: %+v\nValue: %.2f\n", p.Name, p.Price)
 
+	err = deleteProduct(db, product.ID)
+	if err != nil {
+		log.Fatal(err)
+	}
+	
 	products, err := selectProducts(db)
 	if err != nil {
 		log.Fatal(err)
@@ -116,4 +121,17 @@ func selectProducts(db *sql.DB) ([]*Product, error) {
 		products = append(products, &p)
 	}
 	return products, nil
+}
+
+func deleteProduct(db *sql.DB, id string) error {
+	stmt, err := db.Prepare("DELETE FROM products WHERE id = ?")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(id)
+	if err != nil {
+		return err
+	}
+	return nil
 }
