@@ -10,7 +10,7 @@ import (
 type Category struct {
 	ID       int `gorm:"primary_key"`
 	Name     string
-	Products []Product
+	Products []Product `gorm:"many2many:categories_products;"`
 }
 
 type Product struct {
@@ -18,7 +18,7 @@ type Product struct {
 	Name         string
 	Price        float64
 	CategoryID   int
-	Category     Category
+	Categories   []Category `gorm:"many2many:categories_products;"`
 	SerialNumber SerialNumber
 	gorm.Model
 }
@@ -85,13 +85,16 @@ func main() {
 	// fmt.Println(p2)
 	// db.Delete(&p2)
 
-	// category := Category{Name: "Electronics"}
-	// db.Create(&category)
+	category := Category{Name: "Electronics"}
+	db.Create(&category)
+
+	category2 := Category{Name: "House"}
+	db.Create(&category2)
 
 	db.Create(&Product{
 		Name:       "Notebook",
 		Price:      20,
-		CategoryID: 2,
+		Categories: []Category{category, category2},
 	})
 
 	db.Create(&SerialNumber{
