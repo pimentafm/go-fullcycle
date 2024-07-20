@@ -7,10 +7,17 @@ import (
 	"gorm.io/gorm"
 )
 
+type Category struct {
+	ID   int `gorm:"primary_key"`
+	Name string
+}
+
 type Product struct {
-	ID    int `gorm:"primary_key"`
-	Name  string
-	Price float64
+	ID         int `gorm:"primary_key"`
+	Name       string
+	Price      float64
+	CategoryID int
+	Category   Category
 	gorm.Model
 }
 
@@ -21,7 +28,7 @@ func main() {
 		panic("failed to connect database")
 	}
 
-	db.AutoMigrate(&Product{})
+	db.AutoMigrate(&Product{}, &Category{})
 
 	// products := []Product{
 	// 	{Name: "Mobile", Price: 500},
@@ -65,8 +72,23 @@ func main() {
 	// p.Name = "Mobile Phone"
 	// db.Save(&p)
 
-	var p2 Product
-	db.First(&p2, 2)
-	fmt.Println(p2)
-	db.Delete(&p2)
+	// var p2 Product
+	// db.First(&p2, 2)
+	// fmt.Println(p2)
+	// db.Delete(&p2)
+
+	category := Category{Name: "Electronics"}
+	db.Create(&category)
+
+	db.Create(&Product{
+		Name:       "Mobile",
+		Price:      500,
+		CategoryID: 5,
+	})
+
+	var products []Product
+	db.Preload("Category").Find(&products)
+	for _, p := range products {
+		fmt.Println(p.Name, p.Category.Name)
+	}
 }
