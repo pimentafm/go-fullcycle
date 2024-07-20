@@ -11,6 +11,7 @@ type Product struct {
 	ID    int `gorm:"primary_key"`
 	Name  string
 	Price float64
+	gorm.Model
 }
 
 func main() {
@@ -59,13 +60,13 @@ func main() {
 	// 	fmt.Println(p)
 	// }
 
-	var p Product
-	db.First(&p, 1)
-	p.Name = "Mobile Phone"
-	db.Save(&p)
+	// var p Product
+	// db.First(&p, 1)
+	// p.Name = "Mobile Phone"
+	// db.Save(&p)
 
 	var p2 Product
-	db.First(&p2, 1)
+	db.First(&p2, 2)
 	fmt.Println(p2)
 	db.Delete(&p2)
 }
