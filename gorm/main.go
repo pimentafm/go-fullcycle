@@ -38,9 +38,25 @@ func main() {
 	// db.First(&product, "name = ?", "Tablet")
 	// fmt.Printf("Product: %+v\n", product)
 
-	var product []Product
-	db.Find(&product)
-	for _, p := range product {
-		fmt.Printf("Product: %+v\n", p)
+	var products []Product
+	// db.Find(&product)
+	// for _, p := range product {
+	// 	fmt.Printf("Product: %+v\n", p)
+	// }
+
+	// db.Limit(2).Offset(2).Find(&products)
+	// for _, p := range products {
+	// 	fmt.Println(p)
+	// }
+
+	// db.Where("price > ?", 500).Find(&products)
+	// for _, p := range products {
+	// 	fmt.Println(p)
+	// }
+
+	db.Where("name LIKE ?", "%o%").Find(&products)
+	for _, p := range products {
+		fmt.Println(p)
 	}
+
 }
