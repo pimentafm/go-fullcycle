@@ -22,3 +22,7 @@ go test -bench=. -run=^#
 ```go
 go test -bench=. -run=^# -count=10 -benchtime=3s
 ```
+### Docs
+```go
+go help test
+```
